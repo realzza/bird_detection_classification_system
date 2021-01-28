@@ -1,0 +1,10 @@
+soundfile
+librosa
+pandas
+torch
+numpy
+scipy
+tqdm
+kaldiio
+GPUtil
+scikit_learn

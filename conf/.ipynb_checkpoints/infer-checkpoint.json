@@ -1,0 +1,47 @@
+{
+    "n_gpu": 1,
+    "dataset": {
+        "type": "LogfbankDataset",
+        "args": {
+            "wav_scp": "/DATA1/ziang/index/best_30/demo_utt2wav",
+            "utt2label": "/DATA1/ziang/index/best_30/demo_utt2label",
+            "spk2int": "/DATA1/ziang/code/best26and1/index/spk2int.json",
+            "logfbank_kwargs":{
+                "winlen": 0.025,
+                "winstep": 0.01,
+                "nfilt": 256,
+                "nfft": 1024,
+                "lowfreq": 500,
+                "highfreq": null,
+                "preemph": 0.97
+            },
+            "padding": "wrap",
+            "cmn": true
+        }
+    },
+    "dataloader": {
+        "type": "SimpleDataLoader",
+        "args": {
+            "batch_size": 1,
+            "shuffle": true,
+            "num_workers": 8,
+            "drop_last": true
+        }
+    },
+    "model": {
+        "type": "Gvector",
+        "args": {
+            "channels": 1,
+            "block": "BasicBlock", 
+            "num_blocks": [
+                3,
+                4,
+                6,
+                3
+            ],
+            "embd_dim": 1024,
+            "drop": 0.5, 
+            "n_class": 26
+        }
+    }
+}

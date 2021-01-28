@@ -1,0 +1,111 @@
+{
+    "name": "vox1", 
+    "seed": 123,
+    "GPUtil": {
+        "type": "getAvailable",
+        "args": {
+            "limit": 1,
+            "maxMemory": 0.1,
+            "maxLoad": 0.1
+        }
+    },
+    "trainer": {
+        "epochs": 81,
+        "early_stop": 20,
+        "log_step": 88,
+        "save_dir": "exp/",
+        "save_period": 5,
+        "verbosity": 2,
+        "monitor": "min valid_loss",
+        "tensorboard": true
+    }, 
+    "dataset": {
+        "type": "MfccDataset",
+        "args": {
+            "wav_scp": "/DATA1/ziang/index/higher/train_utt2wav_500",
+            "utt2label": "/DATA1/ziang/index/higher/train_utt2label_500",
+            "spk2int": "/DATA1/ziang/code/higher/index/label2int.json",
+            "mfcc_kwargs":{
+                "winlen": 0.025,
+                "winstep": 0.01,
+                "nfilt": 256,
+                "nfft": 1024,
+                "lowfreq": 500,
+                "highfreq": null,
+                "preemph": 0.97
+            },
+            "padding": "wrap",
+            "cmn": true
+        },
+        "valid_split": 0
+    },
+    "valid_dataset": {
+        "type": "MfccDataset",
+        "args": {
+            "wav_scp": "/DATA1/ziang/index/higher/val_utt2wav",
+            "utt2label": "/DATA1/ziang/index/higher/val_utt2label",
+            "spk2int": "/DATA1/ziang/code/higher/index/label2int.json",
+            "mfcc_kwargs":{
+                "winlen": 0.025,
+                "winstep": 0.01,
+                "nfilt": 256,
+                "nfft": 1024,
+                "lowfreq": 500,
+                "highfreq": null,
+                "preemph": 0.97
+            },
+            "padding": "wrap",
+            "cmn": true
+        },
+        "valid_split": 0
+    },
+    "dataloader": {
+        "type": "SimpleDataLoader",
+        "args": {
+            "batch_size": 128,
+            "shuffle": true,
+            "num_workers": 4,
+            "drop_last": true
+        }
+    },
+    "optimizer": {
+        "type": "SGD",
+        "args": {
+            "lr": 0.01,
+            "weight_decay": 0.0001,
+            "momentum": 0.90
+        }
+    },
+    "lr_scheduler": {
+        "type": "ReduceLROnPlateau",
+        "args": {
+            "mode": "min",
+            "patience": 9,
+            "verbose": true
+        }
+    },
+    "loss": {
+        "type": "CrossEntropyLoss",
+        "args": {}
+    },
+    "metrics": [
+        "accuracy",
+        "top_3_acc"
+    ], 
+    "model": {
+        "type": "Gvector",
+        "args": {
+            "channels": 1,
+            "block": "BasicBlock", 
+            "num_blocks": [
+                3,
+                4,
+                6,
+                3
+            ],
+            "embd_dim": 1024,
+            "drop": 0.5, 
+            "n_class": 90
+        }
+    }
+}
